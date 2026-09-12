@@ -1,8 +1,8 @@
 name: lesgo
 
 on:
-  schedule:
-    - cron: "*/5 * * * *"
+  repository_dispatch:
+    types: [cron-tick]
   workflow_dispatch:
 
 permissions:
@@ -14,10 +14,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Empty commit
+      - name: Create scheduled test commit
         run: |
           git config user.name "${{ github.repository_owner }}"
           git config user.email "${{ github.repository_owner_id }}+${{ github.repository_owner }}@users.noreply.github.com"
-          git commit --allow-empty -m "update"
+          git commit --allow-empty -m "scheduled test tick"
           git push
