@@ -1,8 +1,8 @@
 name: lesgo
 
 on:
-  repository_dispatch:
-    types: [cron-tick]
+  schedule:
+    - cron: "*/5 * * * *
   workflow_dispatch:
 
 permissions:
@@ -14,16 +14,18 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Create scheduled test commit
+
+      - name: Random commits
         run: |
           git config user.name "${{ github.repository_owner }}"
           git config user.email "${{ github.repository_owner_id }}+${{ github.repository_owner }}@users.noreply.github.com"
-          messages=(
-            "chore(repo): update source code and project files"
-            "docs: improve project documentation"
-            "test: refresh automated tests"
-            "build: maintain project configuration"
-          )
-          message="${messages[$RANDOM % ${#messages[@]}]}"
-          git commit --allow-empty -m "$message"
+
+          NUM_COMMITS=$(( RANDOM % 6 + 1 ))
+
+          echo "Creating $NUM_COMMITS commits"
+
+          for i in $(seq 1 $NUM_COMMITS); do
+            git commit --allow-empty -m "update $i"
+          done
+
           git push
