@@ -18,5 +18,12 @@ jobs:
         run: |
           git config user.name "${{ github.repository_owner }}"
           git config user.email "${{ github.repository_owner_id }}+${{ github.repository_owner }}@users.noreply.github.com"
-          git commit --allow-empty -m "chore(repo): update source code and project files"
+          messages=(
+            "chore(repo): update source code and project files"
+            "docs: improve project documentation"
+            "test: refresh automated tests"
+            "build: maintain project configuration"
+          )
+          message="${messages[$RANDOM % ${#messages[@]}]}"
+          git commit --allow-empty -m "$message"
           git push
